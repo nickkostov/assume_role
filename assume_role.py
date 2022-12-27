@@ -26,13 +26,12 @@ if profile_name != "default":
     # Assume the role
     response = sts_client.assume_role(
         RoleArn='arn:aws:iam::' + account_id + ':role/' + role_name,
-        RoleSessionName='ExampleSession',
+        RoleSessionName='Assumed Role',
         SerialNumber='arn:aws:iam::' + serial_num_id + ':mfa/' + mfa_name,
         DurationSeconds=3600,
         TokenCode=token_code
     )
 else:
-    print(org_table)
     account_id = input('Enter the Account ID that you want to assume: ')
     role_name = input('Enter the name of the role: ')
     # Assume the role without MFA
