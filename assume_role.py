@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 import boto3
+from prettytable import PrettyTable
+import subprocess
+
+
+org_table=subprocess.run(["./src/table_org.py"])
 
 # Open the profiles file and read it
 with open('profiles', 'r') as f:
@@ -15,15 +20,11 @@ session = boto3.Session(profile_name=profile_name)
 
 # Create an STS client using the session
 sts_client = session.client('sts')
-with open('accounts', 'r') as f:
-    contents = f.read()
-string_list = contents.split()
-output = ' '.join(string_list)
-print('Your profiles are: ' + output)
 
 # Condition if default to not use MFA
 if profile_name != "default":
     # Prompt the user to enter the name of the role and the MFA token code
+    print(org_table)
     account_id = input('Enter the Account ID that you want to assume: ')
     role_name = input('Enter the name of the role: ')
     #
@@ -36,16 +37,17 @@ if profile_name != "default":
         RoleArn='arn:aws:iam::' + account_id + ':role/' + role_name,
         RoleSessionName='ExampleSession',
         SerialNumber='arn:aws:iam::' + serial_num_id + ':mfa/' + mfa_name,
-        DurationSeconds=3600
+        DurationSeconds=3600,
         TokenCode=token_code
     )
 else:
+    print(org_table)
     account_id = input('Enter the Account ID that you want to assume: ')
     role_name = input('Enter the name of the role: ')
     # Assume the role without MFA
     response = sts_client.assume_role(
         RoleArn='arn:aws:iam::' + account_id + ':role/' + role_name,
-        RoleSessionName='ExampleSession'
+        RoleSessionName='Assumed Role',
         DurationSeconds=3600
     )
 
