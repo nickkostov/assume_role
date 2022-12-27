@@ -5,7 +5,9 @@ Python Script that generates the authentication credentials for aws accounts
 
 The script is for the following use case:
 - AWS Organization is enabled
+  - Listing permissions Required
 - You have an API key created in the ORG account
+  - Assigned to a user
 - You are using a separate IAM account to access other accounts
 
 # Example usage:
