@@ -3,18 +3,8 @@ import boto3
 from prettytable import PrettyTable
 import subprocess
 
-
-org_table=subprocess.run(["./src/table_org.py"])
-
-# Open the profiles file and read it
-with open('profiles', 'r') as f:
-    contents = f.read()
-string_list = contents.split()
-
-output = '\n'.join(string_list)
-print('Your profiles are: \n' + output)
-
 # Create a session using the specified profile
+read_profiles=subprocess.run(["./src/reading/read_profiles.py"])
 profile_name = input("Enter the profile that we will be using: ")
 session = boto3.Session(profile_name=profile_name)
 
@@ -23,12 +13,13 @@ sts_client = session.client('sts')
 
 # Condition if default to not use MFA
 if profile_name != "default":
-    # Prompt the user to enter the name of the role and the MFA token code
-    print(org_table)
+    org_table=subprocess.run(["./src/table_org.py"])
     account_id = input('Enter the Account ID that you want to assume: ')
+    read_roles=subprocess.run(["./src/reading/read_roles.py"])
     role_name = input('Enter the name of the role: ')
-    #
+    read_mfa_account_ids=subprocess.run(["./src/reading/read_mfa_account_ids.py"])
     serial_num_id = input('Enter the MFA Account ID: ')
+    read_mfa_names=subprocess.run(["./src/reading/read_mfa_names.py"])
     mfa_name = input('MFA Name: ')
     token_code = input('Enter the MFA token code: ')
 
@@ -51,13 +42,9 @@ else:
         DurationSeconds=3600
     )
 
-# Print the temporary security credentials
-print('Your Session Credentials are: ')
-print('Access Key ID:', response['Credentials']['AccessKeyId'])
-print('Secret Access Key:', response['Credentials']['SecretAccessKey'])
-print('Session Token:', response['Credentials']['SessionToken'])
-
+print('-------------------------------------------------------')
 print('In order to use them copy-pasta the content: ')
 print('export AWS_ACCESS_KEY_ID=' + response['Credentials']['AccessKeyId'])
 print('export AWS_SECRET_ACCESS_KEY=' + response['Credentials']['SecretAccessKey'])
 print('export AWS_SESSION_TOKEN=' + response['Credentials']['SessionToken'])
+print('-------------------------------------------------------')
