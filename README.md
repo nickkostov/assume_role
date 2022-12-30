@@ -27,4 +27,8 @@ Enter the MFA Account ID: 2134141241245
 MFA Name: NAME_OF_MFA_DEVICE
 ```
 
-You will have to create the following files in order to fit the best user case:
+
+
+# ./init.py
+
+The script at the moment is not added as an optional argument thus you will have to run it from the `src/configuration` directory. Once you run that you will be prompted to configure it with your values.
