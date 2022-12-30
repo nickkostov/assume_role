@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 import boto3
-from prettytable import PrettyTable
-import subprocess
-from src.reading.read_profiles import get_aws_profiles
+import os
+from src import table_org as org_table
+from src.configuration import config
+
+# Global VArs
+ASSUME_CONFIG_PATH = os.path.join(os.environ["HOME"], ".assume_config")
+
 # Create a session using the specified profile
-get_aws_profiles()
+config.get_aws_profiles()
+
 profile_name = input("Enter the profile that we will be using: ")
 session = boto3.Session(profile_name=profile_name)
 
@@ -13,13 +18,13 @@ sts_client = session.client('sts')
 
 # Condition if default to not use MFA
 if profile_name != "default":
-    org_table=subprocess.run(["./src/table_org.py"])
     account_id = input('Enter the Account ID that you want to assume: ')
-    read_roles=subprocess.run(["./src/reading/read_roles.py"])
+    # Gets the correct path leading to .assume_config and substitutes the files
+    config.readroles(os.path.join(ASSUME_CONFIG_PATH, "roles"))
     role_name = input('Enter the name of the role: ')
-    read_mfa_account_ids=subprocess.run(["./src/reading/read_mfa_account_ids.py"])
+    config.mfa_acc_id(os.path.join(ASSUME_CONFIG_PATH, "mfa_account_ids"))
     serial_num_id = input('Enter the MFA Account ID: ')
-    read_mfa_names=subprocess.run(["./src/reading/read_mfa_names.py"])
+    config.mfa_read_names(os.path.join(ASSUME_CONFIG_PATH, "mfa_names"))
     mfa_name = input('MFA Name: ')
     token_code = input('Enter the MFA token code: ')
 
