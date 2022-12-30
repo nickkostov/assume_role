@@ -2,3 +2,4 @@ mfa_account_ids
 mfa_names
 profiles
 roles
+__pycache__
