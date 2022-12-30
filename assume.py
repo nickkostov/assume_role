@@ -2,9 +2,9 @@
 import boto3
 from prettytable import PrettyTable
 import subprocess
-
+from src.reading.read_profiles import get_aws_profiles
 # Create a session using the specified profile
-read_profiles=subprocess.run(["./src/reading/read_profiles.py"])
+get_aws_profiles()
 profile_name = input("Enter the profile that we will be using: ")
 session = boto3.Session(profile_name=profile_name)
 
