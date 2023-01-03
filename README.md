@@ -5,30 +5,43 @@ Python Script that generates the authentication credentials for aws accounts
 
 The script is for the following use case:
 - AWS Organization is enabled
-  - Listing permissions Required
+  - Listing permissions Required if you are an admin if not you need to create your own accounts.json file.
 - You have an API key created in the ORG account
   - Assigned to a user
 - You are using a separate IAM account to access other accounts
 
 # Example usage:
+Add it to your path:
+```bash
+export PATH=$PATH:~/.assume_config/assume
+```
+Create symlink:
+Note that this sometimes does not work and you might have to enter the `/usr/local/bin/`
 
 ```bash
-./assume_role.py
+ln -s path/where/you/cloned/the/reposiory/assume.py /usr/local/bin/assume
 ```
+
+Note: `assume init` cleans the old configuration and recreates it.
+
+```bash
+assume --help
+Usage: assume [OPTIONS]
+  Run with init if you want to initialize
+Options:
+  --init          Initialization of configuration directory
+  --gen-acc-list  Generates list of AWS Organization Accounts if only you have admin permissions to your ORG account!
+  --help          Show this message and exit.
+```
+
 
 This will prompt you for:
 ```bash
-./assume_role.py
-
-Enter the profile that we will be using: default
-Enter the Account ID that you want to assume: 2134124124124
-Enter the name of the role: role_name
-Enter the MFA Account ID: 2134141241245
-MFA Name: NAME_OF_MFA_DEVICE
+assume
+profile-name-from (~/.aws/credentials)
+prfoile-name-2
+profile-name-3
+Enter the profile that we will be using: ptc-iam
+ID: 999999999999, Name: Account Name
+Enter the Account ID that you want to assume: 
 ```
-
-
-
-# ./init.py
-
-The script at the moment is not added as an optional argument thus you will have to run it from the `src/configuration` directory. Once you run that you will be prompted to configure it with your values.
