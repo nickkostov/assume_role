@@ -1,6 +1,5 @@
 import boto3
 import json
-import os
 from tqdm import tqdm
 
 # Create an Organizations client
@@ -22,23 +21,23 @@ def table_list_as_json(fpath):
 
     def get_units_in_unit(unit_id):
         units_response = org_client.list_organizational_units_for_parent(ParentId=unit_id)
-        for unit in tqdm(units_response['OrganizationalUnits'], desc="Loading units"):
+        for unit in units_response['OrganizationalUnits']:
             get_accounts_in_unit(unit['Id'])
             get_units_in_unit(unit['Id'])
 
-    # Display a progress bar for the entire function
+    # Display a progress bar for the entire function. Stupid solution but is the best that can be done for now.
     with tqdm(desc="Loading accounts and units", total=len(accounts)) as pbar:
         get_units_in_unit(response['Roots'][0]['Id'])
         pbar.update()
 
-    # Convert the datetime objects to strings
+    # Convert the datetime objects to strings. Datetime is not supported by "import json"
     for account in accounts:
         account['JoinedTimestamp'] = str(account['JoinedTimestamp'])
 
-    # Convert the accounts list to a JSON object
+    # Converts the accounts into json in order to create a quick dictionary: CASE ADMIN
     json_accounts = json.dumps(accounts)
+    # Prints total amount of accounts in ORG.
     print(f"Total number of accounts: {len(accounts)}")
-
+    # Create a file as json an write the values of all accounts.
     with open(fpath, 'w') as f:
-        # Write the JSON object to the file
         f.write(json_accounts)
