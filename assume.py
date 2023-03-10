@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import click
-from src.automatic import table_org
+from assume.automatic import table_org
 import os
 
 ASSUME_CONFIG_PATH = os.path.join(os.environ["HOME"], ".assume_config")
@@ -14,7 +14,7 @@ def cli(init, gen_acc_list):
     if gen_acc_list:    
         table_org.table_list_as_json(os.path.join(ASSUME_CONFIG_PATH, "accounts.json"))
     if init: 
-        from src.configuration import init
+        from assume.configuration import init
         click.echo("Initializing")
-    from src.internals import core
+    from assume.internals import core
 cli()
