@@ -4,3 +4,4 @@ profiles
 roles
 __pycache__
 accounts.json
+*.egg-info
