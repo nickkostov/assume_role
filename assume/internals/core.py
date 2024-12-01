@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import boto3
 import os
-from src.configuration import config
+from assume.configuration import config
 
 # Global VArs
 ASSUME_CONFIG_PATH = os.path.join(os.environ["HOME"], ".assume_config")
@@ -17,7 +17,7 @@ sts_client = session.client('sts')
 
 # Condition if default to not use MFA
 if profile_name != "default":
-    from src.automatic import read_accounts
+    from assume.automatic import read_accounts
     read_accounts.account_specifics(os.path.join(ASSUME_CONFIG_PATH, "accounts.json"))
     account_id = input('Enter the Account ID that you want to assume: ')
     # Gets the correct path leading to .assume_config and substitutes the files
@@ -38,7 +38,7 @@ if profile_name != "default":
         TokenCode=token_code
     )
 else:
-    from src.automatic import table_org, read_accounts
+    from assume.automatic import table_org, read_accounts
     table_org.table_list_as_json(os.path.join(ASSUME_CONFIG_PATH, "accounts.json"))
     read_accounts.account_specifics(os.path.join(ASSUME_CONFIG_PATH, "accounts.json"))
     account_id = input('Enter the Account ID that you want to assume: ')
